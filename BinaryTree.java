@@ -222,8 +222,16 @@ public class BinaryTree {
 
     private void replaceValueHelper(Node node, int oldVal, int newVal) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        if (node == null) { //if node empty return nothing
+            return;
+        }
+        //replace value if the nodes data matches oldVal
+        if (node.data == oldVal) {
+            node.data = newVal;
+        }
+        //Move to the left and right in depth first search using recursion
+        replaceValueHelper(node.left, oldVal, newVal);
+        replaceValueHelper(node.right, oldVal, newVal);
 
     }
 
@@ -244,10 +252,18 @@ public class BinaryTree {
 
     private int findMinHelper(Node node) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        if (node == null) {
+            return Integer.MAX_VALUE; //returns integer.MAX_VALUE is tree is empty
+        }
 
-        return Integer.MAX_VALUE;
+        //recursevily search both sides of tree
+        int left = findMinHelper(node.left);
+        int right = findMinHelper(node.right);
+
+        int min = Math.min(left, right); //find min in both branches
+
+        //return minimum between current node and the left and right branch
+        return Math.min(node.data, min);
     }
 
 
@@ -266,14 +282,22 @@ public class BinaryTree {
 
     private int nodesGTHelper(Node node, int val) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        if (node == null) {
+            return 0;//return 0 if tree is empty
+        }
 
-        // return -1; // RECALL, IF TREE IS EMPTY, RETURN -1
+        int number;
+        if (node.data > val) {//check if node is greater than val
+            number = 1;// add to the count
+        } else {
+            number = 0;// do not add to the count
+        }
+            //Recursevily check both sides of the tree and return total value
+            return number + nodesGTHelper(node.left, val) + nodesGTHelper(node.right, val);
 
 
-        return -1;
     }
+
 
 
     /*
@@ -298,19 +322,25 @@ public class BinaryTree {
      */
 
     public double average() {
-        int[] sumAndCount = averageHelper(root);
-        return (double) sumAndCount[0] / sumAndCount[1];
-    }
+            int[] sumAndCount = averageHelper(root);
+            return (double) sumAndCount[0] / sumAndCount[1];
+        }
 
-    private int[] averageHelper(Node n) {
+        private int[] averageHelper(Node n) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+            if (n == null) {
+                return new int[]{0, 0};//if tree is empty return 0
+            }
 
-        // RECALL, IF THE TREE IS EMPTY, RETURN 0 FOR BOTH THE SUM AND
-        // COUNT LOCATIONS IN THE RETURNED ARRAY AS SHOWN BELOW, ELSE
-        // THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
+            //recursevily find the average of each side of the tree
+            int[] left = averageHelper(n.left);
+            int[] right = averageHelper(n.right);
 
-        return new int[]{0, 0};
+            //use the first element of each array as the sum and the secodn for the result
+            int sum = n.data + left[0] + right[0];
+            int count = 1 + left[1] + right[1];
+
+            //return the array with both
+            return new int[]{sum, count};
     }
 }
